@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SaveUp.Views.EditEntryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:SaveUp.ViewModels"
+    x:DataType="vm:EditEntryViewModel"
+    Shell.NavBarIsVisible="False"
+    Title="Eintrag bearbeiten">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid
+            Padding="16,16,24,14"
+            BackgroundColor="{StaticResource Primary}"
+            ColumnDefinitions="44,*"
+            ColumnSpacing="8">
+            <Button
+                Text="‹"
+                Command="{Binding CancelCommand}"
+                TextColor="White"
+                BackgroundColor="Transparent"
+                BorderWidth="0"
+                FontSize="30"
+                Padding="0"
+                WidthRequest="44"
+                HeightRequest="44"
+                MinimumHeightRequest="44"
+                SemanticProperties.Description="Zurück zur Liste" />
+            <Label
+                Grid.Column="1"
+                Text="Eintrag bearbeiten"
+                TextColor="White"
+                FontFamily="OpenSansSemibold"
+                FontSize="24"
+                VerticalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout
+                Padding="24"
+                Spacing="18"
+                MaximumWidthRequest="720"
+                HorizontalOptions="Center">
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="Kurzbeschreibung" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry
+                        Text="{Binding Description}"
+                        Placeholder="z. B. Kaffee unterwegs"
+                        ReturnType="Next"
+                        MaxLength="80" />
+                    <Label
+                        Text="{Binding DescriptionError}"
+                        IsVisible="{Binding HasDescriptionError}"
+                        Style="{StaticResource ErrorLabelStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="Gesparter Betrag" Style="{StaticResource FieldLabelStyle}" />
+                    <Entry
+                        Text="{Binding AmountText}"
+                        Placeholder="CHF 0.00"
+                        Keyboard="Numeric"
+                        ReturnType="Done" />
+                    <Label
+                        Text="{Binding AmountError}"
+                        IsVisible="{Binding HasAmountError}"
+                        Style="{StaticResource ErrorLabelStyle}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="Datum" Style="{StaticResource FieldLabelStyle}" />
+                    <DatePicker Date="{Binding Date}" Format="dd.MM.yyyy" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="Uhrzeit" Style="{StaticResource FieldLabelStyle}" />
+                    <TimePicker Time="{Binding Time}" Format="HH:mm" />
+                </VerticalStackLayout>
+
+                <Border
+                    IsVisible="{Binding HasOperationError}"
+                    Style="{StaticResource DangerCardStyle}">
+                    <Label Text="{Binding OperationError}" TextColor="{StaticResource Danger}" FontSize="13" />
+                </Border>
+
+                <Button
+                    Text="Änderungen speichern"
+                    Command="{Binding SaveCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}" />
+
+                <Button
+                    Text="Abbrechen"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

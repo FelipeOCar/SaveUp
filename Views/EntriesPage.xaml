@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SaveUp.Views.EntriesPage"
+    x:Name="EntriesPageRoot"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:SaveUp.Models"
+    xmlns:vm="clr-namespace:SaveUp.ViewModels"
+    x:DataType="vm:EntriesViewModel"
+    Shell.NavBarIsVisible="False"
+    Title="Einträge">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Padding="24,22,24,18" BackgroundColor="{StaticResource Primary}">
+            <Label
+                Text="Einträge"
+                TextColor="White"
+                FontFamily="OpenSansSemibold"
+                FontSize="24"
+                SemanticProperties.HeadingLevel="Level1" />
+        </Grid>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,*,Auto" Padding="24" RowSpacing="16" MaximumWidthRequest="720" HorizontalOptions="Center">
+            <VerticalStackLayout Spacing="10">
+                <Border Style="{StaticResource PrimaryCardStyle}">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Gesamteinsparung" TextColor="White" FontSize="14" />
+                        <Label
+                            Text="{Binding TotalSavings, StringFormat='CHF {0:F2}'}"
+                            TextColor="White"
+                            FontFamily="OpenSansSemibold"
+                            FontSize="28" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    IsVisible="{Binding HasOperationError}"
+                    Style="{StaticResource DangerCardStyle}">
+                    <Label Text="{Binding OperationError}" TextColor="{StaticResource Danger}" FontSize="13" />
+                </Border>
+            </VerticalStackLayout>
+
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding Entries}"
+                SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout
+                        Padding="24,56"
+                        Spacing="14"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        <Label Text="＋" FontSize="54" TextColor="{StaticResource Primary}" HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="Noch keine Einträge"
+                            Style="{StaticResource SectionTitleStyle}"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="Erfasse deinen ersten Verzicht und beobachte, wie deine Ersparnisse wachsen."
+                            Style="{StaticResource CaptionLabelStyle}"
+                            HorizontalTextAlignment="Center"
+                            MaximumWidthRequest="320" />
+                        <Button
+                            Text="Ersten Verzicht erfassen"
+                            Command="{Binding NewEntryCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="0,10,0,0" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:SavingEntry">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,0,12">
+                            <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10">
+                                <Label Text="{Binding Description}" FontFamily="OpenSansSemibold" FontSize="15" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding Amount, StringFormat='CHF {0:F2}'}"
+                                    TextColor="{StaticResource Primary}"
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="15" />
+                                <Button
+                                    Grid.Column="2"
+                                    Grid.RowSpan="2"
+                                    Text="⋮"
+                                    Command="{Binding Source={x:Reference EntriesPageRoot}, Path=BindingContext.EntryActionsCommand}"
+                                    CommandParameter="{Binding .}"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    SemanticProperties.Description="Aktionen für diesen Eintrag" />
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding OccurredAt, StringFormat='{0:dd.MM.yyyy, HH:mm}'}"
+                                    Style="{StaticResource CaptionLabelStyle}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button
+                Grid.Row="2"
+                Text="Alle Einträge löschen"
+                Command="{Binding ClearAllCommand}"
+                IsVisible="{Binding HasEntries}"
+                Style="{StaticResource DangerOutlineButtonStyle}" />
+        </Grid>
+    </Grid>
+</ContentPage>

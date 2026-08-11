@@ -3,13 +3,29 @@
     x:Class="SaveUp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:SaveUp"
-    Shell.FlyoutBehavior="Flyout"
-    Title="SaveUp">
+    xmlns:views="clr-namespace:SaveUp.Views"
+    Title="SaveUp"
+    FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource Surface}, Dark={StaticResource SurfaceDark}}"
+    Shell.TabBarForegroundColor="{StaticResource Primary}"
+    Shell.TabBarTitleColor="{StaticResource Primary}"
+    Shell.TabBarUnselectedColor="{AppThemeBinding Light={StaticResource TextMuted}, Dark={StaticResource TextMutedDark}}">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="Dashboard"
+            Route="Dashboard"
+            ContentTemplate="{DataTemplate views:DashboardPage}" />
 
+        <ShellContent
+            Title="Erfassen"
+            Route="AddEntry"
+            ContentTemplate="{DataTemplate views:AddEntryPage}" />
+
+        <ShellContent
+            Title="Einträge"
+            Route="Entries"
+            ContentTemplate="{DataTemplate views:EntriesPage}" />
+    </TabBar>
 </Shell>
